@@ -43,7 +43,7 @@ export const config = {
   waitforTimeout: 10000,
   connectionRetryTimeout: 120000,
   connectionRetryCount: 2,
-  specFileRetries: isCI ? 1 : 0,
+  specFileRetries: 0,
   specFileRetriesDelay: 0,
   specFileRetriesDeferred: false,
 
@@ -53,6 +53,7 @@ export const config = {
   mochaOpts: {
     ui: "bdd",
     timeout: isCI ? 120000 : 60000,
+    retries: isCI ? 1 : 0,
   },
 
   before: async function () {

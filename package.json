@@ -12,6 +12,7 @@
     "dev": "vite",
     "build": "vite build",
     "test:e2e": "wdio run test/wdio.conf.js",
+    "test:unit": "vitest run",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
@@ -22,6 +23,7 @@
   "keywords": [
     "react",
     "vite",
+    "vitest",
     "password-generator",
     "webdriverio",
     "mocha",
