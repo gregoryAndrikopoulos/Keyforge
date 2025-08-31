@@ -1,29 +1,46 @@
 import js from "@eslint/js";
 import globals from "globals";
 import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
-import { defineConfig, globalIgnores } from "eslint/config";
+import eslintConfigPrettier from "eslint-config-prettier";
 
-export default defineConfig([
-  globalIgnores(["dist"]),
+export default [
+  // Base config: JS & JSX
   {
     files: ["**/*.{js,jsx}"],
-    extends: [
-      js.configs.recommended,
-      reactHooks.configs["recommended-latest"],
-      reactRefresh.configs.vite,
-    ],
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
-      parserOptions: {
-        ecmaVersion: "latest",
-        ecmaFeatures: { jsx: true },
-        sourceType: "module",
-      },
+      ecmaVersion: "latest",
+      sourceType: "module",
+      parserOptions: { ecmaFeatures: { jsx: true } },
+      globals: { ...globals.browser, ...globals.node },
     },
+    plugins: { "react-hooks": reactHooks },
     rules: {
-      "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z_]" }],
+      ...js.configs.recommended.rules,
+      ...reactHooks.configs.recommended.rules,
+
+      // Example tweak
+      "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     },
   },
-]);
+
+  // Tests: WDIO + Mocha globals only under /test
+  {
+    files: ["test/**/*.js"],
+    languageOptions: {
+      globals: {
+        ...globals.mocha,
+        browser: "readonly",
+        $: "readonly",
+        $$: "readonly",
+      },
+    },
+  },
+
+  // Prettier integration — disables ESLint stylistic rules
+  eslintConfigPrettier,
+
+  // Ignore generated stuff
+  {
+    ignores: ["node_modules/**", "dist/**", "coverage/**"],
+  },
+];
