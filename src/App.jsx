@@ -1,5 +1,11 @@
-import "./App.css";
+import PasswordGenerator from "./components/password-generator/PasswordGenerator";
 
-export default function App() {
-  return <h1>Hello, Keyforge!</h1>;
-}
+const App = () => {
+  return (
+    <main>
+      <PasswordGenerator />
+    </main>
+  );
+};
+
+export default App;

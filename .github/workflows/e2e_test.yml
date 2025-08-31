@@ -33,6 +33,9 @@ jobs:
       - name: ⚙️ Install dependencies
         run: pnpm install
 
+      - name: 🔬 Unit tests (Vitest)
+        run: pnpm test:unit
+
       - name: 🏗️ Build app
         run: pnpm build
 
