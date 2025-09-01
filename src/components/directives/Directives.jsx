@@ -1,5 +1,5 @@
 import { DIRECTIVES_STEPS, SECURITY_TIPS } from "../../utils/constants.js";
-import "./directives.css";
+import "./Directives.css";
 
 const Directives = () => {
   return (
