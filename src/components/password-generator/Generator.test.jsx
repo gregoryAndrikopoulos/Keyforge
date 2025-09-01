@@ -1,29 +1,29 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import PasswordGenerator from "./PasswordGenerator";
+import Generator from "./Generator.jsx";
 
 function setSlider(val) {
   const slider = screen.getByTestId("length-slider");
   fireEvent.input(slider, { target: { value: String(val) } });
 }
 
-describe("PasswordGenerator (component tests)", () => {
+describe("Generator (component tests)", () => {
   it("renders and the Generate button is enabled by default", () => {
-    render(<PasswordGenerator />);
+    render(<Generator />);
     const btn = screen.getByTestId("btn-generate");
     expect(btn).toBeInTheDocument();
     expect(btn).toBeEnabled();
   });
 
   it("updates the displayed length when the slider moves", () => {
-    render(<PasswordGenerator />);
+    render(<Generator />);
     setSlider(20);
     expect(screen.getByTestId("length-display")).toHaveTextContent("20");
   });
 
   it("disables generation when all character sets are unchecked", async () => {
     const user = userEvent.setup();
-    render(<PasswordGenerator />);
+    render(<Generator />);
 
     // Turn off all include* options
     await user.click(screen.getByTestId("checkbox-includeLowercase"));
@@ -39,7 +39,7 @@ describe("PasswordGenerator (component tests)", () => {
 
   it("generates exactly the selected length", async () => {
     const user = userEvent.setup();
-    render(<PasswordGenerator />);
+    render(<Generator />);
     setSlider(16);
     await user.click(screen.getByTestId("btn-generate"));
     const output = await screen.findByTestId("password-output");
@@ -48,7 +48,7 @@ describe("PasswordGenerator (component tests)", () => {
 
   it("guarantees at least one of each selected type", async () => {
     const user = userEvent.setup();
-    render(<PasswordGenerator />);
+    render(<Generator />);
 
     // Ensure only lowercase, uppercase, numbers are selected
     // (Symbols off, Special off by default)
@@ -79,7 +79,7 @@ describe("PasswordGenerator (component tests)", () => {
 
   it("respects 'exclude ambiguous' (no l i 1 o O 0)", async () => {
     const user = userEvent.setup();
-    render(<PasswordGenerator/>);
+    render(<Generator />);
 
     // Turn on exclude ambiguous
     await user.click(screen.getByTestId("checkbox-excludeAmbiguous"));
@@ -94,7 +94,7 @@ describe("PasswordGenerator (component tests)", () => {
 
   it("copies to clipboard and shows status message", async () => {
     const user = userEvent.setup();
-    render(<PasswordGenerator />);
+    render(<Generator />);
 
     // Spy on clipboard
     const spy = vi.spyOn(navigator.clipboard, "writeText").mockResolvedValue();
@@ -106,14 +106,16 @@ describe("PasswordGenerator (component tests)", () => {
 
     expect(spy).toHaveBeenCalledWith(output.value);
     // Status message appears
-    expect(screen.getByTestId("copy-status")).toHaveTextContent("Copied to clipboard.");
+    expect(screen.getByTestId("copy-status")).toHaveTextContent(
+      "Copied to clipboard."
+    );
 
     spy.mockRestore();
   });
 
   it("can generate digits-only when only Numbers is on", async () => {
     const user = userEvent.setup();
-    render(<PasswordGenerator />);
+    render(<Generator />);
 
     // Turn off all except numbers
     const toggles = [
@@ -138,7 +140,7 @@ describe("PasswordGenerator (component tests)", () => {
 
   it("toggling 'exclude ambiguous' doesn't crash and still generates", async () => {
     const user = userEvent.setup();
-    render(<PasswordGenerator />);
+    render(<Generator />);
 
     // turn on exclude ambiguous
     const cb = screen.getByTestId("checkbox-excludeAmbiguous");

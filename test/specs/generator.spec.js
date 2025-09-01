@@ -3,9 +3,9 @@ import PasswordGeneratorPage from "../page-objects/PasswordGeneratorPage.js";
 const SETS = {
   includeLowercase: "abcdefghijklmnopqrstuvwxyz",
   includeUppercase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-  includeNumbers:   "0123456789",
-  includeSymbols:   "!@#$%^&?",
-  includeSpecial:   "{}[]()+-*/=\\'\"`~,;:._<>",
+  includeNumbers: "0123456789",
+  includeSymbols: "!@#$%^&?",
+  includeSpecial: "{}[]()+-*/=\\'\"`~,;:._<>",
 };
 const AMBIGUOUS = new Set(["l", "i", "1", "o", "O", "0"]);
 
@@ -27,7 +27,7 @@ async function setOnlyNumbers() {
   await PasswordGeneratorPage.toggle("includeNumbers", true);
 }
 
-describe("Password Generator (E2E)", () => {
+describe("Password Generator", () => {
   beforeEach(async () => {
     await PasswordGeneratorPage.open();
   });
@@ -36,7 +36,9 @@ describe("Password Generator (E2E)", () => {
     await PasswordGeneratorPage.generate();
     const value = await PasswordGeneratorPage.getPassword();
     if (!value || value.length < 6) {
-      throw new Error(`Expected a generated password length >= 6, got "${value}"`);
+      throw new Error(
+        `Expected a generated password length >= 6, got "${value}"`
+      );
     }
   });
 

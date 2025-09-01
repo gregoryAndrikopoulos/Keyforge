@@ -1,4 +1,4 @@
-name: E2E
+name: Smoke
 
 on:
   pull_request:
@@ -11,9 +11,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  e2e:
+  smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 15
 
     steps:
       - name: 📦 Checkout
@@ -31,7 +31,7 @@ jobs:
             pnpm-store-${{ runner.os }}-
 
       - name: ⚙️ Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: 🔬 Unit tests (Vitest)
         run: pnpm test:unit
@@ -62,4 +62,4 @@ jobs:
           CI: true
           WDIO_BASEURL: http://localhost:4173
           FORCE_COLOR: "3"
-        run: pnpm test:e2e
+        run: pnpm test:smoke

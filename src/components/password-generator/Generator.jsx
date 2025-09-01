@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import "./PasswordGenerator.css";
 import { CHECKBOXES, OPTION_LABELS } from "../../utils/constants.js";
 import { buildPools, generatePassword } from "../../utils/helpers.js";
+import "./Generator.css";
 
 const CheckboxOption = ({ label, checked, onChange, name }) => {
   const id = `checkbox-${name}`;
@@ -20,7 +20,7 @@ const CheckboxOption = ({ label, checked, onChange, name }) => {
   );
 };
 
-const PasswordGenerator = () => {
+const Generator = () => {
   const [passwordLength, setPasswordLength] = useState(12);
   const [options, setOptions] = useState({
     includeLowercase: true,
@@ -131,10 +131,7 @@ const PasswordGenerator = () => {
       )}
 
       {generatedPassword && (
-        <div
-          className="generated-password"
-          data-testid="generated-section"
-        >
+        <div className="generated-password" data-testid="generated-section">
           <strong>Generated Password:</strong>
           <textarea
             className="password-textarea"
@@ -196,4 +193,4 @@ const PasswordGenerator = () => {
   );
 };
 
-export default PasswordGenerator;
+export default Generator;

@@ -1,9 +1,15 @@
-import PasswordGenerator from "./components/password-generator/PasswordGenerator";
+import Header from "./components/header/Header";
+import Generator from "./components/password-generator/Generator.jsx";
+import Directives from "./components/directives/Directives.jsx";
+import Footer from "./components/footer/Footer";
 
 const App = () => {
   return (
     <main>
-      <PasswordGenerator />
+      <Header />
+      <Generator />
+      <Directives />
+      <Footer />
     </main>
   );
 };
