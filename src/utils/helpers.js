@@ -24,7 +24,9 @@ export function buildPools(options) {
 
   if (!options.excludeAmbiguous) return selected;
 
-  return selected.map((pool) => pool.filter((c) => !AMBIGUOUS_CHARS.includes(c)));
+  return selected.map((pool) =>
+    pool.filter((c) => !AMBIGUOUS_CHARS.includes(c))
+  );
 }
 
 // Generate password guaranteeing at least one char from each enabled pool
@@ -42,7 +44,10 @@ export function generatePassword(length, options) {
 
   // fill the rest from combined pool
   const remaining = Math.max(0, length - required.length);
-  const rest = Array.from({ length: remaining }, () => combined[getRandomInt(combined.length)]);
+  const rest = Array.from(
+    { length: remaining },
+    () => combined[getRandomInt(combined.length)]
+  );
 
   // shuffle to avoid predictable ordering
   return secureShuffle([...required, ...rest]).join("");

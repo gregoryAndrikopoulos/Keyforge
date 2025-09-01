@@ -1,6 +1,6 @@
 # Keyforge 🔑
 
-Keyforge is a web application for generating random, secure passwords.
+A web application for generating random, secure passwords.
 It is built with **React** and powered by **Vite** for fast development
 and optimized builds.
 
@@ -8,7 +8,7 @@ and optimized builds.
 
 ## Workflow Status
 
-[![E2E Tests](https://github.com/gregoryAndrikopoulos/keyforge/actions/workflows/e2e_test.yml/badge.svg)](https://github.com/gregoryAndrikopoulos/keyforge/actions/workflows/e2e_test.yml)
+[![Smoke Tests](https://github.com/gregoryAndrikopoulos/keyforge/actions/workflows/smoke_test.yml/badge.svg)](https://github.com/gregoryAndrikopoulos/keyforge/actions/workflows/smoke_test.yml)
 
 ---
 
@@ -17,9 +17,9 @@ and optimized builds.
 - **React 19** — UI
 - **Vite 7** — dev server & bundler
 - **Vitest 3 + Testing Library** — unit/component tests
-- **WebdriverIO 9 (DevTools)** + **Mocha** — E2E tests
+- **WebdriverIO 9 (DevTools)** + **Mocha** — Smoke tests
 - **ESLint** + **Prettier** — linting & formatting
-- **GitHub Actions** — CI for E2E
+- **GitHub Actions** — CI for Smoke
 - **Node 24**, **pnpm 10** — runtime & package manager
 
 ### Runtime Versions
@@ -88,20 +88,21 @@ Run once in CI mode:
 pnpm test:unit
 ```
 
-### End-to-End tests (WebdriverIO + Mocha)
+### Smoke tests (WebdriverIO + Mocha)
 
 - Specs live under: `test/specs/`
 - Page Objects under: `test/page-objects/`
 - Config at: `test/wdio.conf.js`
 
 The WDIO config auto-picks a **baseUrl**:
+
 - `http://localhost:4173` if a `pnpm preview` server is already up, else
 - `http://localhost:5173` for the dev server.
 
 You can also override via env:
 
 ```bash
-WDIO_BASEURL=http://localhost:4173 pnpm test:e2e
+WDIO_BASEURL=http://localhost:4173 pnpm test:smoke
 ```
 
 Typical local flows:
@@ -109,10 +110,10 @@ Typical local flows:
 ```bash
 # 1) Run against the dev server (in another terminal)
 pnpm dev
-pnpm test:e2e
+pnpm test:smoke
 
 # 2) Run against a preview server
 pnpm build
 pnpm preview &
-pnpm test:e2e
+pnpm test:smoke
 ```
