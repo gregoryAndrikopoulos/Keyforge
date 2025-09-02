@@ -7,6 +7,12 @@ function setSlider(val) {
   fireEvent.input(slider, { target: { value: String(val) } });
 }
 
+// Read the generated password from the div-based output
+async function getOutputValue() {
+  const el = await screen.findByTestId("password-output");
+  return el.textContent || "";
+}
+
 describe("Generator (component tests)", () => {
   it("renders and the Generate button is enabled by default", () => {
     render(<Generator />);
@@ -42,8 +48,8 @@ describe("Generator (component tests)", () => {
     render(<Generator />);
     setSlider(16);
     await user.click(screen.getByTestId("btn-generate"));
-    const output = await screen.findByTestId("password-output");
-    expect(output.value.length).toBe(16);
+    const val = await getOutputValue();
+    expect(val.length).toBe(16);
   });
 
   it("guarantees at least one of each selected type", async () => {
@@ -58,7 +64,7 @@ describe("Generator (component tests)", () => {
     const cbSpecial = screen.getByTestId("checkbox-includeSpecial");
     if (cbSpecial.checked) await user.click(cbSpecial);
 
-    // Make sure core three are ON (they are by default, but make explicit)
+    // Make sure core three are ON (explicit)
     const cbLower = screen.getByTestId("checkbox-includeLowercase");
     if (!cbLower.checked) await user.click(cbLower);
     const cbUpper = screen.getByTestId("checkbox-includeUppercase");
@@ -69,8 +75,8 @@ describe("Generator (component tests)", () => {
     // Set length equal to the number of enabled categories (6)
     setSlider(6);
     await user.click(screen.getByTestId("btn-generate"));
-    const val = (await screen.findByTestId("password-output")).value;
 
+    const val = await getOutputValue();
     expect(val.length).toBe(6);
     expect(/[a-z]/.test(val)).toBe(true);
     expect(/[A-Z]/.test(val)).toBe(true);
@@ -86,7 +92,7 @@ describe("Generator (component tests)", () => {
 
     setSlider(48);
     await user.click(screen.getByTestId("btn-generate"));
-    const val = (await screen.findByTestId("password-output")).value;
+    const val = await getOutputValue();
 
     // No ambiguous chars present
     expect(/[li1oO0]/.test(val)).toBe(false);
@@ -101,10 +107,10 @@ describe("Generator (component tests)", () => {
 
     setSlider(12);
     await user.click(screen.getByTestId("btn-generate"));
-    const output = await screen.findByTestId("password-output");
+    const text = await getOutputValue();
     await user.click(screen.getByTestId("btn-copy"));
 
-    expect(spy).toHaveBeenCalledWith(output.value);
+    expect(spy).toHaveBeenCalledWith(text);
     // Status message appears
     expect(screen.getByTestId("copy-status")).toHaveTextContent(
       "Copied to clipboard."
@@ -133,7 +139,7 @@ describe("Generator (component tests)", () => {
 
     setSlider(10);
     await user.click(screen.getByTestId("btn-generate"));
-    const val = (await screen.findByTestId("password-output")).value;
+    const val = await getOutputValue();
 
     expect(/^\d{10}$/.test(val)).toBe(true);
   });
@@ -151,7 +157,7 @@ describe("Generator (component tests)", () => {
     fireEvent.input(slider, { target: { value: "64" } });
 
     await user.click(screen.getByTestId("btn-generate"));
-    const val = (await screen.findByTestId("password-output")).value;
+    const val = await getOutputValue();
 
     expect(val.length).toBe(64);
     expect(/[li1oO0]/.test(val)).toBe(false);

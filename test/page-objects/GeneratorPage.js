@@ -1,15 +1,10 @@
-class PasswordGeneratorPage {
+class GeneratorPage {
   get root() {
-    return $('[data-testid="password-generator"]');
+    return $('[data-testid="generator"]');
   }
   get lengthGroup() {
     return $('[data-testid="length-group"]');
   }
-  get buttonGroup() {
-    return $('[data-testid="button-group"]');
-  }
-
-  // Controls
   get slider() {
     return $('[data-testid="length-slider"]');
   }
@@ -19,33 +14,19 @@ class PasswordGeneratorPage {
   get btnGenerateAgain() {
     return $('[data-testid="btn-generate-again"]');
   }
-  get btnCopy() {
-    return $('[data-testid="btn-copy"]');
-  }
-
   checkbox(name) {
     return $(`[data-testid="checkbox-${name}"]`);
   }
-
-  // Output / status
   get output() {
     return $('[data-testid="password-output"]');
   }
-  get copyStatus() {
-    return $('[data-testid="copy-status"]');
-  }
-  get charsetError() {
-    return $('[data-testid="charset-error"]');
-  }
 
-  // Navigation
   async open(path = "/") {
     await browser.url(path);
     await (await this.root).waitForExist();
     await (await this.lengthGroup).waitForDisplayed();
   }
 
-  // Actions
   async setLength(value) {
     const el = await this.slider;
     await browser.execute(
@@ -82,8 +63,8 @@ class PasswordGeneratorPage {
   async getPassword() {
     const el = await this.output;
     await el.waitForDisplayed();
-    return el.getValue();
+    return el.getText();
   }
 }
 
-export default new PasswordGeneratorPage();
+export default new GeneratorPage();

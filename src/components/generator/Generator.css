@@ -1,0 +1,191 @@
+.generator-container {
+  text-align: center;
+  margin: 1.25rem auto;
+  padding: 2rem 1.25rem 1.5rem 1.25rem;
+}
+
+.column {
+  display: inline-block;
+  width: 45%;
+}
+
+.password-options {
+  text-align: left;
+  margin: 1.25rem 0;
+  padding: 0.65rem 0;
+  color: var(--color-grey-dark);
+  border-bottom: 1px solid var(--color-grey);
+}
+
+.password-options label {
+  display: block;
+  margin-bottom: 0.65rem;
+}
+
+.length-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--color-grey-dark);
+  width: 100%;
+}
+
+.length-input input {
+  margin-left: 1rem;
+  padding: 0.5rem 0.1rem;
+  border-radius: 8px;
+  color: var(--color-accent);
+  background-color: var(--color-white);
+  width: 28%;
+}
+
+.length-display {
+  margin-left: 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--color-accent);
+  width: 2rem;
+}
+
+.generated-password {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  font-size: 1.2rem;
+  color: var(--color-grey-dark);
+}
+
+.password-output {
+  margin-top: 1.25rem;
+  padding: 0.5rem;
+  border: 1px solid var(--color-grey);
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  color: var(--color-accent);
+  background-color: var(--color-white);
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  user-select: text;
+  cursor: text;
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+}
+
+.password-output-line {
+  display: inline-block;
+  white-space: pre;
+}
+
+.password-output,
+.length-input input {
+  box-shadow: 0 2px 5px var(--color-shadow);
+  transition:
+    background-color 0.3s,
+    box-shadow 0.3s,
+    color 0.3s;
+}
+
+.password-output:focus,
+.length-input input:focus {
+  box-shadow: 0 0 10px var(--color-tint);
+}
+
+.length-input {
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--color-grey-dark);
+  width: 100%;
+  box-shadow: 0 2px 5px var(--color-grey-dark);
+}
+
+.password-output::-webkit-scrollbar {
+  display: none;
+}
+
+.tickLabels {
+  font-weight: bold;
+  color: var(--color-grey-dark);
+  margin-left: 30%;
+}
+
+.generator-container #length-slider {
+  accent-color: var(--color-accent);
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: var(--color-grey);
+  border-radius: 999px;
+  outline: none;
+}
+
+.generator-container .tickLabels input[type="checkbox"] {
+  accent-color: var(--color-accent);
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+
+.generator-container .length-input {
+  border: 1px solid var(--color-grey);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.ch-lower {
+  color: #e53935;
+}
+.ch-upper {
+  color: #00bcd4;
+}
+.ch-digit {
+  color: #1e88e5;
+}
+.ch-special {
+  color: #43a047;
+}
+.ch-symbol {
+  color: #8e24aa;
+}
+.ch-other {
+  color: var(--color-grey-dark);
+}
+.legend-lower {
+  color: #e53935;
+}
+.legend-upper {
+  color: #00bcd4;
+}
+.legend-digit {
+  color: #1e88e5;
+}
+.legend-symbol {
+  color: #8e24aa;
+}
+.legend-special {
+  color: #43a047;
+}
+.legend-ambiguous {
+  color: #6d6d6d;
+}
+
+@media (max-width: 720px) {
+  .column {
+    display: block;
+    width: 100%;
+  }
+}
