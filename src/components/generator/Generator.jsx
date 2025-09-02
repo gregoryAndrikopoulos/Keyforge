@@ -1,10 +1,41 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { CHECKBOXES, OPTION_LABELS } from "../../utils/constants.js";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { CHECKBOXES, OPTION_LABELS, SETS } from "../../utils/constants.js";
 import { buildPools, generatePassword } from "../../utils/helpers.js";
 import "./Generator.css";
 
+const SAMPLE_BY_NAME = {
+  includeLowercase: "a-z",
+  includeUppercase: "A-Z",
+  includeNumbers: "0-9",
+  includeSymbols: "!@#$%^&?",
+  includeSpecial: "+-*/=...",
+  excludeAmbiguous: "li1oO0",
+};
+
+const CLASS_BY_NAME = {
+  includeLowercase: "legend-lower",
+  includeUppercase: "legend-upper",
+  includeNumbers: "legend-digit",
+  includeSymbols: "legend-symbol",
+  includeSpecial: "legend-special",
+  excludeAmbiguous: "legend-ambiguous",
+};
+
+const classifyChar = (ch) => {
+  if (SETS.includeLowercase.includes(ch)) return "ch-lower";
+  if (SETS.includeUppercase.includes(ch)) return "ch-upper";
+  if (SETS.includeNumbers.includes(ch)) return "ch-digit";
+  if (SETS.includeSpecial.includes(ch)) return "ch-special";
+  if (SETS.includeSymbols.includes(ch)) return "ch-symbol";
+  return "ch-other";
+};
+
 const CheckboxOption = ({ label, checked, onChange, name }) => {
   const id = `checkbox-${name}`;
+  const base = String(label).split("(")[0].trim();
+  const sample = SAMPLE_BY_NAME[name];
+  const sampleClass = CLASS_BY_NAME[name];
+
   return (
     <label htmlFor={id}>
       <input
@@ -15,7 +46,13 @@ const CheckboxOption = ({ label, checked, onChange, name }) => {
         onChange={onChange}
         data-testid={`checkbox-${name}`}
       />
-      {label}
+      <span>{base}</span>
+      {sample && (
+        <>
+          {" "}
+          <span className={sampleClass}>{sample}</span>
+        </>
+      )}
     </label>
   );
 };
@@ -57,21 +94,25 @@ const Generator = () => {
     navigator.clipboard
       .writeText(generatedPassword)
       .then(() => setCopied(true))
-      .catch((err) => {
-        console.error("Error copying password to clipboard:", err);
-        setCopied(false);
-      });
+      .catch(() => setCopied(false));
   };
 
-  const handleCheckboxChange = (optionName) => {
+  const handleCheckboxChange = (optionName) =>
     setOptions((prev) => ({ ...prev, [optionName]: !prev[optionName] }));
+
+  const outputRef = useRef(null);
+  const handleOutputFocus = () => {
+    const el = outputRef.current;
+    if (!el) return;
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
   };
 
   return (
-    <div
-      className="container generator-container"
-      data-testid="password-generator"
-    >
+    <div className="container generator-container" data-testid="generator">
       <div className="length-input" data-testid="length-group">
         <label htmlFor="length-slider">Password Length: </label>
         <span className="length-display" data-testid="length-display">
@@ -133,14 +174,23 @@ const Generator = () => {
       {generatedPassword && (
         <div className="generated-password" data-testid="generated-section">
           <strong>Generated Password:</strong>
-          <textarea
-            className="password-textarea"
-            value={generatedPassword}
-            readOnly
-            aria-label="Generated password"
-            onFocus={(e) => e.target.select()}
+          <div
+            ref={outputRef}
+            className="password-output"
+            role="textbox"
+            aria-readonly="true"
+            tabIndex={0}
+            onFocus={handleOutputFocus}
             data-testid="password-output"
-          />
+          >
+            <span className="password-output-line">
+              {generatedPassword.split("").map((ch, i) => (
+                <span key={i} className={classifyChar(ch)}>
+                  {ch}
+                </span>
+              ))}
+            </span>
+          </div>
           <div
             aria-live="polite"
             role="status"

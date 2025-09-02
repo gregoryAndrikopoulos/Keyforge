@@ -1,4 +1,4 @@
-import PasswordGeneratorPage from "../page-objects/PasswordGeneratorPage.js";
+import PasswordGeneratorPage from "../page-objects/GeneratorPage.js";
 
 const SETS = {
   includeLowercase: "abcdefghijklmnopqrstuvwxyz",

@@ -1,7 +1,6 @@
 import { $, browser } from "@wdio/globals";
 
 class HeaderPage {
-  // Roots & key elements
   get root() {
     return $('[data-testid="header.root"]');
   }
@@ -12,13 +11,11 @@ class HeaderPage {
     return $('[data-testid="header.subtitle"]');
   }
 
-  // Navigation
   async open(path = "/") {
     await browser.url(path);
     await (await this.root).waitForExist();
   }
 
-  // Accessors
   async getTitleText() {
     const el = await this.title;
     await el.waitForDisplayed();
