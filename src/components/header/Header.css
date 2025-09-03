@@ -10,7 +10,10 @@
   font-size: 2rem;
 }
 
-.subtitle {
-  margin-top: 0.8rem;
-  font-size: 1rem;
+.logo {
+    max-width: 25rem;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    padding-top: 1rem;
 }
