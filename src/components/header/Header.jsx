@@ -3,12 +3,12 @@ import "./Header.css";
 const Header = () => {
   return (
     <header id="top" className="header" role="banner" data-testid="header.root">
-      <h1 className="title" data-testid="header.title">
-        Keyforge
-      </h1>
-      <p className="subtitle" data-testid="header.subtitle">
-        A down to business password generator
-      </p>
+      <img
+        src="/banner.png"
+        alt="Keyforge logo"
+        className="logo"
+        data-testid="header.logo"
+      />
     </header>
   );
 };

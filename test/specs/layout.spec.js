@@ -7,17 +7,10 @@ describe("Layout (Header / Directives / Footer)", () => {
     await HeaderPage.open("/");
   });
 
-  it("header renders title and subtitle", async () => {
+  it("header renders logo", async () => {
     await (await HeaderPage.root).waitForExist();
-    const title = await HeaderPage.getTitleText();
-    const subtitle = await HeaderPage.getSubtitleText();
-
-    if (title.trim() !== "Keyforge") {
-      throw new Error(`Unexpected header title: "${title}"`);
-    }
-    if (!/password generator/i.test(subtitle)) {
-      throw new Error(`Unexpected or missing subtitle: "${subtitle}"`);
-    }
+    const logo = await HeaderPage.getLogo();
+    expect(await logo.isDisplayed()).toBe(true);
   });
 
   it("directives render with steps and categories", async () => {

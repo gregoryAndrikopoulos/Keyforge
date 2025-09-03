@@ -4,11 +4,8 @@ class HeaderPage {
   get root() {
     return $('[data-testid="header.root"]');
   }
-  get title() {
-    return $('[data-testid="header.title"]');
-  }
-  get subtitle() {
-    return $('[data-testid="header.subtitle"]');
+  get logo() {
+    return $('[data-testid="header.logo"]');
   }
 
   async open(path = "/") {
@@ -16,16 +13,10 @@ class HeaderPage {
     await (await this.root).waitForExist();
   }
 
-  async getTitleText() {
-    const el = await this.title;
+  async getLogo() {
+    const el = await this.logo;
     await el.waitForDisplayed();
-    return el.getText();
-  }
-
-  async getSubtitleText() {
-    const el = await this.subtitle;
-    await el.waitForDisplayed();
-    return el.getText();
+    return el;
   }
 }
 
