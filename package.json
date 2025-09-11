@@ -20,18 +20,6 @@
     "lint:fix:format": "pnpm lint:fix && pnpm format",
     "preview": "vite preview"
   },
-  "keywords": [
-    "react",
-    "vite",
-    "vitest",
-    "password-generator",
-    "webdriverio",
-    "mocha",
-    "automation",
-    "ci",
-    "github-actions",
-    "testing"
-  ],
   "dependencies": {
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
