@@ -1,11 +1,19 @@
 .footer {
-  background-color: var(--color-dark);
-  color: var(--color-white);
-  padding: 1rem 0;
+  background: var(--surface-2);
+  border-top: 1px solid var(--border);
+  padding: clamp(0.75rem, 2vw, 1rem) 0;
   text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
 }
 
 .footer-content {
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 var(--pad);
+  max-width: var(--content-max);
+}
+
+.footer p {
+  margin: 0;
+  line-height: 1.5;
 }

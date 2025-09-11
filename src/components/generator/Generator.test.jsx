@@ -1,10 +1,32 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Generator from "./Generator.jsx";
 
 function setSlider(val) {
   const slider = screen.getByTestId("length-slider");
   fireEvent.input(slider, { target: { value: String(val) } });
+}
+
+// Click the visible toggle (input + .switch-visual is the hit target)
+async function clickToggle(name, desired) {
+  const user = userEvent.setup();
+  const input = screen.getByTestId(`checkbox-${name}`);
+  const toggle = input.nextElementSibling?.classList.contains("switch-visual")
+    ? input.nextElementSibling
+    : input; // fallback, just in case
+
+  const before = input.checked;
+
+  if (desired === undefined) {
+    await user.click(toggle);
+    await waitFor(() => expect(input.checked).toBe(!before));
+    return;
+  }
+
+  if (before !== desired) {
+    await user.click(toggle);
+    await waitFor(() => expect(input.checked).toBe(desired));
+  }
 }
 
 // Read the generated password from the div-based output
@@ -28,14 +50,13 @@ describe("Generator (component tests)", () => {
   });
 
   it("disables generation when all character sets are unchecked", async () => {
-    const user = userEvent.setup();
     render(<Generator />);
 
     // Turn off all include* options
-    await user.click(screen.getByTestId("checkbox-includeLowercase"));
-    await user.click(screen.getByTestId("checkbox-includeUppercase"));
-    await user.click(screen.getByTestId("checkbox-includeNumbers"));
-    await user.click(screen.getByTestId("checkbox-includeSymbols"));
+    await clickToggle("includeLowercase", false);
+    await clickToggle("includeUppercase", false);
+    await clickToggle("includeNumbers", false);
+    await clickToggle("includeSymbols", false);
     // includeSpecial is false by default; leave as is
 
     // Button should be disabled; no error shown yet (no click)
@@ -57,20 +78,11 @@ describe("Generator (component tests)", () => {
     render(<Generator />);
 
     // Ensure only lowercase, uppercase, numbers are selected
-    // (Symbols off, Special off by default)
-    const cbSymbols = screen.getByTestId("checkbox-includeSymbols");
-    if (cbSymbols.checked) await user.click(cbSymbols);
-
-    const cbSpecial = screen.getByTestId("checkbox-includeSpecial");
-    if (cbSpecial.checked) await user.click(cbSpecial);
-
-    // Make sure core three are ON (explicit)
-    const cbLower = screen.getByTestId("checkbox-includeLowercase");
-    if (!cbLower.checked) await user.click(cbLower);
-    const cbUpper = screen.getByTestId("checkbox-includeUppercase");
-    if (!cbUpper.checked) await user.click(cbUpper);
-    const cbNums = screen.getByTestId("checkbox-includeNumbers");
-    if (!cbNums.checked) await user.click(cbNums);
+    await clickToggle("includeSymbols", false);
+    await clickToggle("includeSpecial", false);
+    await clickToggle("includeLowercase", true);
+    await clickToggle("includeUppercase", true);
+    await clickToggle("includeNumbers", true);
 
     // Set length equal to the number of enabled categories (6)
     setSlider(6);
@@ -88,7 +100,7 @@ describe("Generator (component tests)", () => {
     render(<Generator />);
 
     // Turn on exclude ambiguous
-    await user.click(screen.getByTestId("checkbox-excludeAmbiguous"));
+    await clickToggle("excludeAmbiguous", true);
 
     setSlider(48);
     await user.click(screen.getByTestId("btn-generate"));
@@ -124,18 +136,11 @@ describe("Generator (component tests)", () => {
     render(<Generator />);
 
     // Turn off all except numbers
-    const toggles = [
-      "checkbox-includeLowercase",
-      "checkbox-includeUppercase",
-      "checkbox-includeSymbols",
-      "checkbox-includeSpecial",
-    ];
-    for (const id of toggles) {
-      const cb = screen.getByTestId(id);
-      if (cb.checked) await user.click(cb);
-    }
-    const cbNums = screen.getByTestId("checkbox-includeNumbers");
-    if (!cbNums.checked) await user.click(cbNums);
+    await clickToggle("includeLowercase", false);
+    await clickToggle("includeUppercase", false);
+    await clickToggle("includeSymbols", false);
+    await clickToggle("includeSpecial", false);
+    await clickToggle("includeNumbers", true);
 
     setSlider(10);
     await user.click(screen.getByTestId("btn-generate"));
@@ -149,8 +154,7 @@ describe("Generator (component tests)", () => {
     render(<Generator />);
 
     // turn on exclude ambiguous
-    const cb = screen.getByTestId("checkbox-excludeAmbiguous");
-    if (!cb.checked) await user.click(cb);
+    await clickToggle("excludeAmbiguous", true);
 
     // generate a long password
     const slider = screen.getByTestId("length-slider");

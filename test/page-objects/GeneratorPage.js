@@ -14,9 +14,15 @@ class GeneratorPage {
   get btnGenerateAgain() {
     return $('[data-testid="btn-generate-again"]');
   }
-  checkbox(name) {
+
+  checkboxInput(name) {
     return $(`[data-testid="checkbox-${name}"]`);
   }
+
+  checkboxToggle(name) {
+    return $(`#checkbox-${name} + .switch-visual`);
+  }
+
   get output() {
     return $('[data-testid="password-output"]');
   }
@@ -41,13 +47,33 @@ class GeneratorPage {
   }
 
   async toggle(name, desired) {
-    const box = await this.checkbox(name);
-    const selected = await box.isSelected();
+    const input = await this.checkboxInput(name);
+    const toggle = await this.checkboxToggle(name);
+
+    await toggle.scrollIntoView();
+    await toggle.moveTo();
+
+    const current = await input.isSelected();
+
     if (desired === undefined) {
-      await box.click();
+      await toggle.click();
+      await browser.waitUntil(
+        async () => (await input.isSelected()) !== current,
+        { timeout: 1500, timeoutMsg: `Toggle "${name}" did not change state` }
+      );
       return;
     }
-    if (selected !== desired) await box.click();
+
+    if (current !== desired) {
+      await toggle.click();
+      await browser.waitUntil(
+        async () => (await input.isSelected()) === desired,
+        {
+          timeout: 1500,
+          timeoutMsg: `Toggle "${name}" did not reach desired state`,
+        }
+      );
+    }
   }
 
   async generate() {
