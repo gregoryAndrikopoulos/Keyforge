@@ -28,7 +28,7 @@ This repo pins tool versions via **asdf** in `.tool-versions`:
 
 ```txt
 nodejs 24.7.0
-pnpm 10.15.0
+pnpm 10.15.1
 ```
 
 > If you use `asdf`, simply run:
