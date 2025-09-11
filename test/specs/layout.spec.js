@@ -1,3 +1,4 @@
+import { expect } from "@wdio/globals";
 import HeaderPage from "../page-objects/HeaderPage.js";
 import DirectivesPage from "../page-objects/DirectivesPage.js";
 import FooterPage from "../page-objects/FooterPage.js";

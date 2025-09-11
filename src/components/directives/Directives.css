@@ -1,38 +1,44 @@
 .directives-container {
-  color: var(--color-grey-dark);
+  width: min(1800px, 100%);
   margin: 1.5rem auto;
-  padding: 3rem 1.25rem 1.5rem;
+  color: var(--text);
+  padding: clamp(1.5rem, 3vw, 3rem) var(--pad);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
 }
 
 .directives-title {
   font-size: 1.5rem;
+  font-weight: 700;
   margin-bottom: 1rem;
-  color: var(--color-tint);
   text-align: center;
+  color: var(--accent);
 }
 
-/* Section headings above lists */
 .directives-section-heading {
   margin: 2rem 0 0.5rem;
-  font-weight: bold;
-  color: var(--color-grey-dark);
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text);
 }
 
-/* Lists */
 .directives-list,
 .tips-list {
   margin: 0 0 1.25rem 1.5rem;
   padding: 0.65rem 0;
-  color: var(--color-grey-dark);
-  border-bottom: 1px solid var(--color-grey);
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
 }
 
 .directives-list li,
 .tips-list li {
   margin-bottom: 0.5rem;
+  line-height: 1.5;
 }
 
-/* Scroll button container */
 .scroll {
-  margin-top: 2.35rem;
+  margin-top: 2rem;
+  text-align: center;
 }

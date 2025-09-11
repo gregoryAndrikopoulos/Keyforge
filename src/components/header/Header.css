@@ -1,19 +1,19 @@
 .header {
-  background-color: var(--color-tint);
-  color: var(--color-white);
-  padding: 1rem;
-  text-align: center;
-}
+  display: grid;
+  place-items: center;
 
-.title {
-  margin: 0;
-  font-size: 2rem;
+  background: var(--accent);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+
+  padding: clamp(0.75rem, 2vw, 1rem);
 }
 
 .logo {
-    max-width: 25rem;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-    padding-top: 1rem;
+  display: block;
+  height: auto;
+  margin: 0 auto;
+  width: clamp(140px, 32vw, 320px);
+  user-select: none;
+  -webkit-user-drag: none;
 }
