@@ -36,16 +36,19 @@
   gap: 0.5rem;
   margin-bottom: 1rem;
 }
+
 .length-label {
   font-weight: 600;
   color: var(--text);
 }
+
 .length-control {
   display: grid;
   grid-template-columns: 1fr max-content;
   align-items: center;
   gap: 0.75rem;
 }
+
 .length-display {
   min-width: 3ch;
   text-align: right;
@@ -58,21 +61,26 @@
   width: 100%;
   height: 6px;
   border-radius: 999px;
-  background: var(--surface-2);
+
+  --min: 6;
+  --max: 256;
+  --val: 12;
+  --percent: calc((var(--val) - var(--min)) * 100 / (var(--max) - var(--min)));
+  background:
+        /* left (progress) */
+    linear-gradient(var(--accent), var(--accent)) 0 0 /
+      calc(var(--percent) * 1%) 100% no-repeat,
+    /* right (track) */ var(--surface-2);
+
   outline: none;
   appearance: none;
 }
 
 #length-slider:active {
-  background: var(--accent); /* orange track */
-}
-
-#length-slider:active::-webkit-slider-thumb {
-  border-color: var(--accent-700);
-}
-
-#length-slider:active::-moz-range-thumb {
-  border-color: var(--accent-700);
+  background:
+    linear-gradient(var(--accent), var(--accent)) 0 0 /
+      calc(var(--percent) * 1%) 100% no-repeat,
+    var(--muted);
 }
 
 #length-slider::-webkit-slider-thumb {
@@ -86,6 +94,26 @@
   cursor: pointer;
 }
 
+#length-slider:active::-webkit-slider-thumb {
+  border-color: var(--accent-700);
+}
+
+#length-slider::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--surface-2);
+}
+
+#length-slider::-moz-range-progress {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+#length-slider:active::-moz-range-track {
+  background: var(--muted);
+}
+
 #length-slider::-moz-range-thumb {
   width: 20px;
   height: 20px;
@@ -94,6 +122,10 @@
   border: 2px solid var(--accent);
   box-shadow: var(--shadow-soft);
   cursor: pointer;
+}
+
+#length-slider:active::-moz-range-thumb {
+  border-color: var(--accent-700);
 }
 
 .options-grid {
@@ -177,7 +209,7 @@
 }
 
 .switch-input:focus-visible + .switch-visual {
-  outline: 3px solid var(--ring); /* rely on token for focus ring */
+  outline: 3px solid var(--ring);
   outline-offset: 2px;
 }
 
@@ -241,6 +273,7 @@
     border-color 0.2s,
     box-shadow 0.2s;
 }
+
 .password-output:focus {
   outline: none;
   border-color: var(--ring);
@@ -324,7 +357,6 @@
   opacity: 0.85;
 }
 
-/* A11y helper */
 .visually-hidden {
   position: absolute !important;
   height: 1px;

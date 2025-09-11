@@ -21,11 +21,9 @@ const classifyChar = (ch) => {
   return "ch-other";
 };
 
-/** One row: “Lowercase  a-z” + switch */
 const CheckboxRow = ({ name, label, checked, onToggle }) => {
   const id = `checkbox-${name}`;
   const sample = SAMPLE_BY_NAME[name];
-
   return (
     <label className="switch-row" htmlFor={id}>
       <span className="switch-text">
@@ -47,6 +45,9 @@ const CheckboxRow = ({ name, label, checked, onToggle }) => {
 };
 
 const Generator = () => {
+  const MIN_LEN = 6;
+  const MAX_LEN = 256;
+
   const [passwordLength, setPasswordLength] = useState(12);
   const [options, setOptions] = useState({
     includeLowercase: true,
@@ -60,6 +61,15 @@ const Generator = () => {
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState("");
 
+  const labelByName = useMemo(
+    () =>
+      OPTION_LABELS.reduce((acc, o) => {
+        acc[o.name] = o.label;
+        return acc;
+      }, {}),
+    []
+  );
+
   const pools = useMemo(() => buildPools(options), [options]);
   const charsetEmpty = useMemo(
     () => pools.reduce((n, p) => n + p.length, 0) === 0,
@@ -67,6 +77,15 @@ const Generator = () => {
   );
 
   useEffect(() => setCopied(false), [generatedPassword]);
+
+  const sliderRef = useRef(null);
+  useEffect(() => {
+    const el = sliderRef.current;
+    if (!el) return;
+    el.style.setProperty("--min", String(MIN_LEN));
+    el.style.setProperty("--max", String(MAX_LEN));
+    el.style.setProperty("--val", String(passwordLength));
+  }, [passwordLength, MIN_LEN, MAX_LEN]);
 
   const handleGenerateClick = useCallback(() => {
     if (charsetEmpty) {
@@ -78,7 +97,7 @@ const Generator = () => {
     setGeneratedPassword(generatePassword(passwordLength, options));
   }, [charsetEmpty, options, passwordLength]);
 
-  const handleCopyClick = async () => {
+  const handleCopyClick = useCallback(async () => {
     if (!generatedPassword) return;
     try {
       await navigator.clipboard.writeText(generatedPassword);
@@ -86,13 +105,15 @@ const Generator = () => {
     } catch {
       setCopied(false);
     }
-  };
+  }, [generatedPassword]);
 
-  const toggleOption = (name) =>
-    setOptions((prev) => ({ ...prev, [name]: !prev[name] }));
+  const toggleOption = useCallback(
+    (name) => setOptions((prev) => ({ ...prev, [name]: !prev[name] })),
+    []
+  );
 
   const outputRef = useRef(null);
-  const handleOutputFocus = () => {
+  const handleOutputFocus = useCallback(() => {
     const el = outputRef.current;
     if (!el) return;
     const r = document.createRange();
@@ -100,7 +121,7 @@ const Generator = () => {
     const sel = window.getSelection();
     sel.removeAllRanges();
     sel.addRange(r);
-  };
+  }, []);
 
   return (
     <div className="generator-shell" data-testid="generator">
@@ -112,21 +133,25 @@ const Generator = () => {
       </header>
 
       <section className="generator-card">
-        {/* Length control */}
         <div className="length-input" data-testid="length-group">
           <label htmlFor="length-slider" className="length-label">
             Password Length
           </label>
           <div className="length-control">
             <input
+              ref={sliderRef}
               id="length-slider"
               type="range"
-              min="6"
-              max="256"
+              min={MIN_LEN}
+              max={MAX_LEN}
               value={passwordLength}
-              onInput={(e) => setPasswordLength(parseInt(e.target.value, 10))}
-              aria-valuemin={6}
-              aria-valuemax={256}
+              onInput={(e) => {
+                const v = parseInt(e.target.value, 10);
+                setPasswordLength(v);
+                e.currentTarget.style.setProperty("--val", String(v));
+              }}
+              aria-valuemin={MIN_LEN}
+              aria-valuemax={MAX_LEN}
               aria-valuenow={passwordLength}
               data-testid="length-slider"
             />
@@ -156,10 +181,7 @@ const Generator = () => {
                 <CheckboxRow
                   key={opt.name}
                   name={opt.name}
-                  label={
-                    OPTION_LABELS.find((o) => o.name === opt.name)?.label ||
-                    opt.label
-                  }
+                  label={labelByName[opt.name] || opt.label}
                   checked={!!options[opt.name]}
                   onToggle={() => toggleOption(opt.name)}
                 />
